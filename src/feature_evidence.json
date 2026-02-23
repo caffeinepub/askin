@@ -2,12 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-modify-the-application-entry-point-to-present-the-login-authentication-option-immediately-when-users-first-access-the-application-before-showing-any-other-content-or-features",
-      "featureTitle": "Modify the application entry point to present the login/authentication option immediately when users first access the application, before showing any other content or features.",
+      "featureId": "feature-enable-senior-users-to-answer-doubts-posted-by-junior-users",
+      "featureTitle": "Enable Senior users to answer doubts posted by Junior users",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/Layout.tsx",
-        "frontend/src/components/LoginScreen.tsx"
+        "frontend/src/components/AnswerForm.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -19,7 +17,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-9"
+        "REQ-3"
       ],
       "confidence": "high"
     }

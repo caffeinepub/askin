@@ -1,78 +1,19 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 5,
-  "summary": "A student Q&A platform named 'askin' where juniors can post doubts (text/photo) and seniors answer with explanations (notes/video). Features rating system, points/certificates for seniors, and leaderboard. Built with HTML/CSS/JavaScript and Firebase.",
+  "projectStateVersion": 3,
+  "summary": "App with login page, senior and junior roles, doubt posting and answering system",
   "architectural_notes": [
-    "Web-based application using HTML, CSS, JavaScript",
-    "Firebase for authentication and database",
-    "Firebase Cloud Storage for image/video/notes uploads",
-    "Two user roles: Juniors (ask doubts) and Seniors (answer doubts)",
-    "Future scope: AI chatbot integration"
+    "User role system with senior and junior designations",
+    "Doubt posting and answering workflow between juniors and seniors"
   ],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-implement-user-authentication-system-with-two-user-roles-junior-students-who-post-doubts-and-senior-students-who-answer-doubts-users-must-be-able-to-sign-up-and-log-in-using-internet-identity",
-      "title": "Implement user authentication system with two user roles: Junior (students who post doubts) and Senior (students who answer doubts). Users must be able to sign up and log in using Internet Identity.",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-create-doubt-posting-functionality-where-juniors-can-post-doubts-with-a-text-description-and-optionally-attach-a-photo-each-doubt-should-be-stored-with-the-author-s-identity-timestamp-and-attachment",
-      "title": "Create doubt posting functionality where Juniors can post doubts with a text description and optionally attach a photo. Each doubt should be stored with the author's identity, timestamp, and attachment.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-build-an-answer-comment-section-where-seniors-can-respond-to-doubts-with-explanations-answers-should-support-text-content-and-optionally-allow-attaching-notes-text-files-or-short-video-explanations",
-      "title": "Build an answer/comment section where Seniors can respond to doubts with explanations. Answers should support text content and optionally allow attaching notes (text files) or short video explanations.",
+      "id": "feature-enable-senior-users-to-answer-doubts-posted-by-junior-users",
+      "title": "Enable Senior users to answer doubts posted by Junior users",
       "reqIds": [
         "REQ-3"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-implement-a-rating-system-where-students-can-rate-answers-provided-by-seniors-each-answer-should-display-its-average-rating-and-students-should-be-able-to-submit-a-rating-from-1-to-5-stars",
-      "title": "Implement a rating system where students can rate answers provided by Seniors. Each answer should display its average rating and students should be able to submit a rating from 1 to 5 stars.",
-      "reqIds": [
-        "REQ-4"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-build-a-leaderboard-page-that-displays-the-top-seniors-ranked-by-their-earned-points-the-leaderboard-should-show-rank-name-and-total-points",
-      "title": "Build a leaderboard page that displays the top Seniors ranked by their earned points. The leaderboard should show rank, name, and total points.",
-      "reqIds": [
-        "REQ-6"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-design-a-visually-engaging-and-modern-frontend-with-a-cohesive-educational-theme-use-a-warm-friendly-color-palette-avoid-blue-and-purple-unless-naturally-suited-with-clear-typography-optimized-for-readability-the-layout-should-emphasize-content-hierarchy-with-prominent-doubt-cards-clean-answer-threads-and-intuitive-navigation-for-juniors-and-seniors",
-      "title": "Design a visually engaging and modern frontend with a cohesive educational theme. Use a warm, friendly color palette (avoid blue and purple unless naturally suited) with clear typography optimized for readability. The layout should emphasize content hierarchy with prominent doubt cards, clean answer threads, and intuitive navigation for juniors and seniors.",
-      "reqIds": [
-        "REQ-7"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-render-generated-images-for-the-homepage-hero-section-doubt-placeholder-icons-and-leaderboard-trophy-graphics-as-static-assets-in-frontend-public-assets-generated",
-      "title": "Render generated images for the homepage hero section, doubt placeholder icons, and leaderboard trophy graphics as static assets in frontend/public/assets/generated.",
-      "reqIds": [
-        "REQ-8"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-modify-the-application-entry-point-to-present-the-login-authentication-option-immediately-when-users-first-access-the-application-before-showing-any-other-content-or-features",
-      "title": "Modify the application entry point to present the login/authentication option immediately when users first access the application, before showing any other content or features.",
-      "reqIds": [
-        "REQ-9"
       ],
       "version": 1
     }
@@ -80,63 +21,48 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Login/Signup system with Firebase authentication",
+      "summary": "Add senior and junior user roles with names after login",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Post doubt feature (text + image upload)",
+      "summary": "Enable junior users to post doubts",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-3",
-      "summary": "Comment/Answer section for seniors to respond",
+      "summary": "Enable senior users to answer doubts",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-4",
-      "summary": "Rating system for student answers",
-      "reqIds": [],
+      "summary": "Capture and store user names during the role setup process for both Junior and Senior users after login",
+      "reqIds": [
+        "REQ-1"
+      ],
       "status": "pending"
     },
     {
       "id": "AR-5",
-      "summary": "Leaderboard showing top seniors by points",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-6",
-      "summary": "Notes upload section for seniors",
-      "reqIds": [],
+      "summary": "Enable Junior users to post doubts with a description and optional attachments",
+      "reqIds": [
+        "REQ-2"
+      ],
       "status": "pending"
     },
     {
       "id": "AR-7",
-      "summary": "Short video explanation upload feature",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-8",
-      "summary": "Points and certificates system for seniors",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-13",
-      "summary": "Create a points system where Seniors earn points for providing answers and receiving high ratings. Track cumulative points for each Senior user.",
+      "summary": "Display user names in doubt cards, answer cards, and throughout the application UI",
       "reqIds": [
-        "REQ-5"
+        "REQ-4"
       ],
       "status": "pending"
     }
   ],
-  "gameProjectType": "none",
-  "projectName": "askin",
+  "projectName": "Askin Q&A",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

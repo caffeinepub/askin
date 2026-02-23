@@ -167,6 +167,19 @@ actor {
     if (not isJunior(caller)) {
       Runtime.trap("Unauthorized: Only Juniors can rate answers");
     };
+    
+    // Verify that the caller is the author of the doubt being rated
+    switch (doubts.get(doubtId)) {
+      case (null) {
+        Runtime.trap("Doubt not found");
+      };
+      case (?doubt) {
+        if (doubt.author != caller) {
+          Runtime.trap("Unauthorized: You can only rate answers to your own doubts");
+        };
+      };
+    };
+    
     if (rating < 1 or rating > 5) {
       Runtime.trap("Invalid rating: Must be between 1 and 5");
     };

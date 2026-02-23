@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { usePostAnswer } from '../hooks/usePostAnswer';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
+import { Input } from './ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { usePostAnswer } from '../hooks/usePostAnswer';
 import { ExternalBlob } from '../backend';
-import { Principal } from '@icp-sdk/core/principal';
-import { FileText, Video, X } from 'lucide-react';
+import { Principal } from '@dfinity/principal';
+import { Upload, FileText, Video } from 'lucide-react';
 import { Progress } from './ui/progress';
 
 interface AnswerFormProps {
@@ -17,149 +18,206 @@ export default function AnswerForm({ doubtId }: AnswerFormProps) {
   const [text, setText] = useState('');
   const [notesFile, setNotesFile] = useState<File | null>(null);
   const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const { mutate: postAnswer, isPending } = usePostAnswer();
+  const [notesProgress, setNotesProgress] = useState(0);
+  const [videoProgress, setVideoProgress] = useState(0);
+
+  const postAnswer = usePostAnswer();
 
   const handleNotesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setNotesFile(file);
+    if (file) {
+      // Validate file type for notes (documents)
+      const validTypes = ['application/pdf', 'text/plain', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      if (!validTypes.includes(file.type)) {
+        alert('Please upload a valid document file (PDF, TXT, DOC, DOCX)');
+        e.target.value = '';
+        return;
+      }
+      // Validate file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size must be less than 10MB');
+        e.target.value = '';
+        return;
+      }
+      setNotesFile(file);
+      setNotesProgress(0);
+    }
   };
 
   const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setVideoFile(file);
+    if (file) {
+      // Validate file type for video
+      const validTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'];
+      if (!validTypes.includes(file.type)) {
+        alert('Please upload a valid video file (MP4, WebM, OGG, MOV)');
+        e.target.value = '';
+        return;
+      }
+      // Validate file size (max 50MB)
+      if (file.size > 50 * 1024 * 1024) {
+        alert('Video size must be less than 50MB');
+        e.target.value = '';
+        return;
+      }
+      setVideoFile(file);
+      setVideoProgress(0);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!text.trim()) return;
 
-    let notes: ExternalBlob | null = null;
-    let video: ExternalBlob | null = null;
-
-    if (notesFile) {
-      const arrayBuffer = await notesFile.arrayBuffer();
-      const uint8Array = new Uint8Array(arrayBuffer);
-      notes = ExternalBlob.fromBytes(uint8Array).withUploadProgress((percentage) => {
-        setUploadProgress(percentage / 2);
-      });
+    if (!text.trim()) {
+      alert('Please provide an explanation');
+      return;
     }
 
-    if (videoFile) {
-      const arrayBuffer = await videoFile.arrayBuffer();
-      const uint8Array = new Uint8Array(arrayBuffer);
-      video = ExternalBlob.fromBytes(uint8Array).withUploadProgress((percentage) => {
-        setUploadProgress(50 + percentage / 2);
-      });
-    }
+    try {
+      let notesBlob: ExternalBlob | null = null;
+      let videoBlob: ExternalBlob | null = null;
 
-    postAnswer(
-      { doubtId, text: text.trim(), notes, video },
-      {
-        onSuccess: () => {
-          setText('');
-          setNotesFile(null);
-          setVideoFile(null);
-          setUploadProgress(0);
-        },
+      if (notesFile) {
+        const notesBytes = new Uint8Array(await notesFile.arrayBuffer());
+        notesBlob = ExternalBlob.fromBytes(notesBytes).withUploadProgress((percentage) => {
+          setNotesProgress(percentage);
+        });
       }
-    );
+
+      if (videoFile) {
+        const videoBytes = new Uint8Array(await videoFile.arrayBuffer());
+        videoBlob = ExternalBlob.fromBytes(videoBytes).withUploadProgress((percentage) => {
+          setVideoProgress(percentage);
+        });
+      }
+
+      await postAnswer.mutateAsync({
+        doubtId,
+        text,
+        notes: notesBlob,
+        video: videoBlob,
+      });
+
+      // Reset form
+      setText('');
+      setNotesFile(null);
+      setVideoFile(null);
+      setNotesProgress(0);
+      setVideoProgress(0);
+      
+      // Clear file inputs
+      const notesInput = document.getElementById('notes-upload') as HTMLInputElement;
+      const videoInput = document.getElementById('video-upload') as HTMLInputElement;
+      if (notesInput) notesInput.value = '';
+      if (videoInput) videoInput.value = '';
+    } catch (error) {
+      console.error('Failed to post answer:', error);
+      alert('Failed to post answer. Please try again.');
+    }
   };
 
+  const isUploading = notesProgress > 0 && notesProgress < 100 || videoProgress > 0 && videoProgress < 100;
+
   return (
-    <Card className="border-green-200 dark:border-green-800 shadow-lg">
-      <CardHeader className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20">
-        <CardTitle className="text-xl text-green-800 dark:text-green-300">Post Your Answer</CardTitle>
+    <Card className="border-primary/20">
+      <CardHeader>
+        <CardTitle className="text-xl">Post Your Answer</CardTitle>
       </CardHeader>
-      <CardContent className="pt-6">
+      <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="text" className="text-sm font-medium">
-              Your Explanation
+          <div>
+            <Label htmlFor="answer-text" className="text-base font-medium">
+              Explanation *
             </Label>
             <Textarea
-              id="text"
+              id="answer-text"
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Provide a detailed explanation to help the student..."
-              rows={4}
+              className="min-h-[150px] mt-2"
               required
-              className="border-green-200 focus:border-green-400 dark:border-green-800 resize-none"
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Attach Notes (Optional)</Label>
-              {notesFile ? (
-                <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                  <div className="flex items-center space-x-2">
-                    <FileText className="w-5 h-5 text-green-600 dark:text-green-400" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{notesFile.name}</span>
+          <div>
+            <Label htmlFor="notes-upload" className="text-base font-medium flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              Notes (Optional)
+            </Label>
+            <p className="text-sm text-muted-foreground mb-2">
+              Upload supporting documents (PDF, TXT, DOC, DOCX - max 10MB)
+            </p>
+            <Input
+              id="notes-upload"
+              type="file"
+              onChange={handleNotesChange}
+              accept=".pdf,.txt,.doc,.docx"
+              className="cursor-pointer"
+            />
+            {notesFile && (
+              <div className="mt-2">
+                <p className="text-sm text-muted-foreground">
+                  Selected: {notesFile.name}
+                </p>
+                {notesProgress > 0 && notesProgress < 100 && (
+                  <div className="mt-2">
+                    <Progress value={notesProgress} className="h-2" />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Uploading notes: {notesProgress}%
+                    </p>
                   </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setNotesFile(null)}
-                    className="h-8 w-8"
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
-                </div>
-              ) : (
-                <label className="flex flex-col items-center justify-center h-24 border-2 border-dashed border-green-300 dark:border-green-700 rounded-lg cursor-pointer hover:bg-green-50 dark:hover:bg-green-900/10 transition-colors">
-                  <FileText className="w-6 h-6 mb-1 text-green-500" />
-                  <span className="text-xs text-gray-600 dark:text-gray-400">Upload notes</span>
-                  <input type="file" className="hidden" accept=".pdf,.doc,.docx,.txt" onChange={handleNotesChange} />
-                </label>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Attach Video (Optional)</Label>
-              {videoFile ? (
-                <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-                  <div className="flex items-center space-x-2">
-                    <Video className="w-5 h-5 text-green-600 dark:text-green-400" />
-                    <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{videoFile.name}</span>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setVideoFile(null)}
-                    className="h-8 w-8"
-                  >
-                    <X className="w-4 h-4" />
-                  </Button>
-                </div>
-              ) : (
-                <label className="flex flex-col items-center justify-center h-24 border-2 border-dashed border-green-300 dark:border-green-700 rounded-lg cursor-pointer hover:bg-green-50 dark:hover:bg-green-900/10 transition-colors">
-                  <Video className="w-6 h-6 mb-1 text-green-500" />
-                  <span className="text-xs text-gray-600 dark:text-gray-400">Upload video</span>
-                  <input type="file" className="hidden" accept="video/*" onChange={handleVideoChange} />
-                </label>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
 
-          {uploadProgress > 0 && uploadProgress < 100 && (
-            <div className="space-y-1">
-              <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
-                <span>Uploading...</span>
-                <span>{Math.round(uploadProgress)}%</span>
+          <div>
+            <Label htmlFor="video-upload" className="text-base font-medium flex items-center gap-2">
+              <Video className="w-4 h-4" />
+              Video Explanation (Optional)
+            </Label>
+            <p className="text-sm text-muted-foreground mb-2">
+              Upload a video explanation (MP4, WebM, OGG, MOV - max 50MB)
+            </p>
+            <Input
+              id="video-upload"
+              type="file"
+              onChange={handleVideoChange}
+              accept="video/mp4,video/webm,video/ogg,video/quicktime"
+              className="cursor-pointer"
+            />
+            {videoFile && (
+              <div className="mt-2">
+                <p className="text-sm text-muted-foreground">
+                  Selected: {videoFile.name}
+                </p>
+                {videoProgress > 0 && videoProgress < 100 && (
+                  <div className="mt-2">
+                    <Progress value={videoProgress} className="h-2" />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Uploading video: {videoProgress}%
+                    </p>
+                  </div>
+                )}
               </div>
-              <Progress value={uploadProgress} className="h-2" />
-            </div>
-          )}
+            )}
+          </div>
 
           <Button
             type="submit"
-            disabled={!text.trim() || isPending}
-            className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white"
+            disabled={postAnswer.isPending || isUploading || !text.trim()}
+            className="w-full"
           >
-            {isPending ? 'Posting...' : 'Post Answer'}
+            {postAnswer.isPending ? (
+              'Posting Answer...'
+            ) : isUploading ? (
+              'Uploading Files...'
+            ) : (
+              <>
+                <Upload className="w-4 h-4 mr-2" />
+                Post Answer
+              </>
+            )}
           </Button>
         </form>
       </CardContent>

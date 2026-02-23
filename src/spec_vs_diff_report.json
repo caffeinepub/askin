@@ -1,31 +1,48 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-23T02:47:52.611Z",
-  "summary": "The implementation fully satisfies REQ-9 by modifying App.tsx to check authentication status first and render LoginScreen for unauthenticated users. The LoginScreen component provides a prominent, visually appealing login interface with Internet Identity integration. All acceptance criteria are met: login is shown first, the interface is prominent and guides users to authenticate, authenticated users proceed to main content, and unauthenticated users cannot access main features.",
-  "missing_requirements": [],
-  "hallucinated_features": [
+  "generatedAt": "2026-02-23T03:50:12.516Z",
+  "summary": "The diff implements most core requirements but lacks evidence of user name display throughout the UI. Backend stores names in UserProfile and enables role-based doubt/answer posting with attachments. However, the frontend file summaries and truncated code do not show names being displayed in doubt cards, answer cards, header, or leaderboard as required by REQ-4.",
+  "missing_requirements": [
     {
-      "description": "Loading state with spinner during authentication initialization",
-      "reason": "BuildRequest does not specify handling of loading/initialization states. While this is good UX practice, it was not explicitly requested in REQ-9 or acceptance criteria.",
+      "id": "REQ-4",
+      "requirement": "Display user names in doubt cards, answer cards, and throughout the application UI",
+      "reason": "Frontend file summaries describe DoubtCard and AnswerCard components but do not mention displaying author/responder names. Summary states 'author, timestamp, description' for DoubtCard and 'responder, text, rating stars' for AnswerCard without explicitly including name display. Layout component mentions 'user profile display' but unclear if this shows the name. No evidence of names on leaderboard despite LeaderboardTable being described.",
       "evidence": [
-        "frontend/src/App.tsx"
-      ]
-    },
-    {
-      "description": "Branded login screen with features grid showcasing platform capabilities (Ask Doubts, Share Knowledge, Earn Recognition)",
-      "reason": "BuildRequest only requires presenting the login option, not creating a marketing/onboarding experience with feature highlights. The acceptance criteria specify 'prominently displayed' and 'clearly guides users' but do not request feature showcases or hero sections.",
-      "evidence": [
-        "frontend/src/components/LoginScreen.tsx"
+        "frontend/src/components/DoubtCard.tsx",
+        "frontend/src/components/AnswerCard.tsx",
+        "frontend/src/components/Layout.tsx",
+        "frontend/src/components/LeaderboardTable.tsx"
       ]
     }
   ],
-  "confidence": 0.95,
+  "hallucinated_features": [
+    {
+      "description": "Rating system for answers with star ratings and user rating input",
+      "reason": "The diff includes RatingStars.tsx, RatingInput.tsx, useRateAnswer hook, and rating functionality in AnswerCard. The BuildRequest explicitly excludes rating features in non-goals and does not mention rating in any requirement or acceptance criteria.",
+      "evidence": [
+        "frontend/src/components/RatingStars.tsx",
+        "frontend/src/components/RatingInput.tsx",
+        "frontend/src/hooks/useRateAnswer.ts",
+        "frontend/src/components/AnswerCard.tsx"
+      ]
+    },
+    {
+      "description": "Leaderboard system with points tracking for seniors",
+      "reason": "The diff includes LeaderboardPage, LeaderboardTable, useGetLeaderboard hook, and backend seniorPoints Map. The BuildRequest does not request a leaderboard feature, points system, or ranking mechanism. While REQ-4 mentions 'Names are displayed on the leaderboard', this appears to be an acceptance criterion assuming a leaderboard exists, but no requirement requests creating one.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/pages/LeaderboardPage.tsx",
+        "frontend/src/components/LeaderboardTable.tsx",
+        "frontend/src/hooks/useGetLeaderboard.ts"
+      ]
+    }
+  ],
+  "confidence": 0.75,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/App.tsx",
-    "frontend/src/components/Layout.tsx",
-    "frontend/src/components/LoginScreen.tsx",
+    "frontend/src/components/AnswerForm.tsx",
     "project_state.json"
   ]
 }

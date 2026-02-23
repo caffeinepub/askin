@@ -1,32 +1,104 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Show login option first on application startup",
+  "title": "Add user role names and doubt Q&A system",
   "requirements": [
     {
-      "id": "REQ-9",
-      "summary": "Present login/authentication option immediately when users first access the application, before showing any other content or features",
+      "id": "REQ-1",
+      "summary": "Capture and store user names during role setup after login",
       "acceptanceCriteria": [
-        "When users access the application for the first time, they see a login prompt or authentication interface before the main content",
-        "The login interface is prominently displayed and clearly guides users to authenticate via Internet Identity",
-        "After successful authentication, users proceed to the main application content (doubts feed, role setup, etc.)",
-        "Unauthenticated users cannot access main application features without logging in first"
+        "Users must provide their name when setting up their profile after first login",
+        "Names are stored in the user profile in the backend",
+        "Names are displayed throughout the application when referencing users"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/LoginScreen.tsx",
-          "operation": "create",
-          "description": "Create a dedicated login screen component that displays prominently when users are not authenticated. Include branding elements, a clear call-to-action for Internet Identity login, and brief explanation of the platform. Use the authorization component to handle Internet Identity authentication. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/components/RoleSetupModal.tsx",
           "operation": "modify",
-          "description": "Modify the root App component to check authentication status first. If the user is not authenticated (no identity from useInternetIdentity), render the LoginScreen component instead of the router. Only render the TanStack Router and application routes after successful authentication. This ensures unauthenticated users see the login screen before any application content."
+          "description": "Update the RoleSetupModal to include a name input field alongside the role selection. The form should collect both name and role (Junior or Senior) before calling useSaveCallerUserProfile with the complete UserProfile object. Use the authorization component's profile setup pattern to ensure the name is captured during first-time user onboarding. Verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/components/Layout.tsx",
           "operation": "modify",
-          "description": "Update the Layout component to handle the authenticated state more gracefully. Since authentication now happens before routing, ensure the Layout assumes the user is authenticated and focuses on profile setup flow (RoleSetupModal) and navigation without redundant authentication checks."
+          "description": "Update the Layout component to display the user's name in the header using the userProfile data from useGetCallerUserProfile. Show the name next to the user avatar or in a profile section, replacing or supplementing any principal display. Ensure the name is visible when authenticated and a profile exists."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Enable Junior users to post doubts with description and optional attachments",
+      "acceptanceCriteria": [
+        "Junior users can access a doubt posting form",
+        "Doubts include a text description field",
+        "Optional image attachments can be uploaded with doubts",
+        "Posted doubts appear in the main doubts feed",
+        "Senior users cannot post doubts"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/DoubtForm.tsx",
+          "operation": "modify",
+          "description": "Verify that the DoubtForm supports text description and optional image upload with progress tracking using ExternalBlob from the blob-storage component. The form should use usePostDoubt hook for submission. Ensure the form is only accessible to Junior users by checking userProfile.role === UserRole.Junior in the parent component."
+        },
+        {
+          "path": "frontend/src/pages/DoubtsPage.tsx",
+          "operation": "modify",
+          "description": "Update the DoubtsPage to conditionally render the DoubtForm in the sidebar only for Junior users (userProfile.role === UserRole.Junior). For Senior users, display an informational message explaining they can answer doubts but cannot post them. Ensure the role check uses the userProfile from useGetCallerUserProfile."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Enable Senior users to answer doubts with text, notes, and video attachments",
+      "acceptanceCriteria": [
+        "Senior users can view all posted doubts",
+        "Senior users can submit answers with text explanations",
+        "Answers can include optional notes and video attachments",
+        "Answers are displayed under the corresponding doubt",
+        "Junior users cannot post answers"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AnswerForm.tsx",
+          "operation": "modify",
+          "description": "Verify that the AnswerForm supports text input, optional notes file upload, and optional video file upload with progress tracking using ExternalBlob from the blob-storage component. The form should use usePostAnswer hook for submission. Ensure proper file type validation for notes and video attachments."
+        },
+        {
+          "path": "frontend/src/pages/DoubtDetailPage.tsx",
+          "operation": "modify",
+          "description": "Update the DoubtDetailPage to conditionally render the AnswerForm only for Senior users (userProfile.role === UserRole.Senior). For Junior users, hide the answer form or display a message indicating only Senior users can answer. Ensure the role check uses the userProfile from useGetCallerUserProfile and verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Display user names throughout the application UI",
+      "acceptanceCriteria": [
+        "Doubt author names are shown on doubt cards",
+        "Answer author names are shown on answer cards",
+        "User names appear in the header when logged in",
+        "Names are displayed on the leaderboard"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/DoubtCard.tsx",
+          "operation": "modify",
+          "description": "Update DoubtCard to fetch and display the author's name using useGetUserProfile hook with the doubt's author Principal. Show the author's name prominently in the card header or metadata section. Handle loading and error states gracefully, falling back to a truncated principal display if the profile is unavailable."
+        },
+        {
+          "path": "frontend/src/components/AnswerCard.tsx",
+          "operation": "modify",
+          "description": "Update AnswerCard to fetch and display the responder's name using useGetUserProfile hook with the answer's responder Principal. Show the responder's name prominently in the card header or metadata section. Handle loading and error states gracefully, falling back to a truncated principal display if the profile is unavailable."
+        },
+        {
+          "path": "frontend/src/components/LeaderboardTable.tsx",
+          "operation": "modify",
+          "description": "Update LeaderboardTable to fetch and display user names for each leaderboard entry using useGetUserProfile hook with the entry's userId Principal. Replace or supplement the principal display with the user's name in each table row. Handle loading states with skeletons and gracefully handle missing profiles."
+        },
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "modify",
+          "description": "Ensure the Layout header displays the logged-in user's name from userProfile.name (already fetched via useGetCallerUserProfile). The name should be visible in the user profile section of the header, providing clear identification of the current user. This complements the name display added in REQ-1."
         }
       ]
     }

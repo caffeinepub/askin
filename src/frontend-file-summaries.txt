@@ -6,7 +6,7 @@
   "frontend/src/components/DoubtForm.tsx": "Form component for Junior users to post doubts with text description and optional image upload with progress tracking.",
   "frontend/src/components/DoubtCard.tsx": "Card component displaying doubt information including author, timestamp, description, and optional attachment image with click navigation to detail view.",
   "frontend/src/components/DoubtsFeed.tsx": "Feed component displaying all doubts in reverse chronological order with loading, error, and empty states.",
-  "frontend/src/components/AnswerForm.tsx": "Form component for Senior users to post answers with text explanation and optional notes/video attachments with upload progress.",
+  "frontend/src/components/AnswerForm.tsx": "Form component for Senior users to post answers with text explanation, optional document notes, and optional video attachments, including file type validation, size limits, and upload progress tracking.",
   "frontend/src/components/AnswerCard.tsx": "Card component displaying answer information including responder, text, rating stars, attachments (notes/video), and rating input for authenticated users.",
   "frontend/src/components/AnswersList.tsx": "List component displaying all answers for a specific doubt with loading, error, and empty states.",
   "frontend/src/components/RatingStars.tsx": "Reusable star rating component supporting both display mode (showing average rating) and interactive mode (allowing user to rate).",

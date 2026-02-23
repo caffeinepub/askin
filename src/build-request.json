@@ -1,37 +1,97 @@
 {
   "kind": "build_request",
-  "title": "Show login option first on application startup",
+  "title": "Add user role names and doubt Q&A system",
+  "projectName": "Askin Q&A",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-9",
-      "text": "Modify the application entry point to present the login/authentication option immediately when users first access the application, before showing any other content or features.",
-      "target": "frontend",
+      "id": "REQ-1",
+      "text": "Capture and store user names during the role setup process for both Junior and Senior users after login",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-latest"
         ],
         "quotes": [
-          "Enter the logins option forst"
+          "Enter the senior and junior after login with names"
         ]
       },
       "acceptanceCriteria": [
-        "When users access the application for the first time, they see a login prompt or authentication interface before the main content",
-        "The login interface is prominently displayed and clearly guides users to authenticate via Internet Identity",
-        "After successful authentication, users proceed to the main application content (doubts feed, role setup, etc.)",
-        "Unauthenticated users cannot access main application features without logging in first"
+        "Users must provide their name when setting up their profile after first login",
+        "Names are stored in the user profile in the backend",
+        "Names are displayed throughout the application when referencing users"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Enable Junior users to post doubts with a description and optional attachments",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "post doubt by junior"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Junior users can access a doubt posting form",
+        "Doubts include a text description field",
+        "Optional image attachments can be uploaded with doubts",
+        "Posted doubts appear in the main doubts feed",
+        "Senior users cannot post doubts"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Enable Senior users to answer doubts posted by Junior users",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "answer for doubt"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Senior users can view all posted doubts",
+        "Senior users can submit answers with text explanations",
+        "Answers can include optional notes and video attachments",
+        "Answers are displayed under the corresponding doubt",
+        "Junior users cannot post answers"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Display user names in doubt cards, answer cards, and throughout the application UI",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-latest"
+        ],
+        "quotes": [
+          "Enter the senior and junior after login with names"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Doubt author names are shown on doubt cards",
+        "Answer author names are shown on answer cards",
+        "User names appear in the header when logged in",
+        "Names are displayed on the leaderboard"
       ]
     }
   ],
   "constraints": [
-    "Must use existing Internet Identity authentication system",
-    "Do not modify the useInternetIdentity hook or authentication logic",
-    "Preserve existing routing structure and navigation once authenticated"
+    "Maintain the existing user profile structure in the backend",
+    "Preserve the current authentication flow using Internet Identity",
+    "Keep role-based access control for posting doubts and answers"
   ],
   "nonGoals": [
-    "Changing the authentication provider from Internet Identity",
-    "Modifying the role setup flow after login",
-    "Adding new authentication methods"
+    "Editing or deleting posted doubts",
+    "Editing or deleting posted answers",
+    "Direct messaging between users",
+    "Notification system for new answers"
   ],
   "imageRequirements": {
     "required": [],
