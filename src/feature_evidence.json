@@ -1,0 +1,169 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-user-authentication-system-with-two-user-roles-junior-students-who-post-doubts-and-senior-students-who-answer-doubts-users-must-be-able-to-sign-up-and-log-in-using-internet-identity",
+      "featureTitle": "Implement user authentication system with two user roles: Junior (students who post doubts) and Senior (students who answer doubts). Users must be able to sign up and log in using Internet Identity.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/Layout.tsx",
+        "frontend/src/components/LoginButton.tsx",
+        "frontend/src/components/RoleSetupModal.tsx",
+        "frontend/src/hooks/useGetCallerUserProfile.ts",
+        "frontend/src/hooks/useSaveCallerUserProfile.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-create-doubt-posting-functionality-where-juniors-can-post-doubts-with-a-text-description-and-optionally-attach-a-photo-each-doubt-should-be-stored-with-the-author-s-identity-timestamp-and-attachment",
+      "featureTitle": "Create doubt posting functionality where Juniors can post doubts with a text description and optionally attach a photo. Each doubt should be stored with the author's identity, timestamp, and attachment.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/DoubtCard.tsx",
+        "frontend/src/components/DoubtForm.tsx",
+        "frontend/src/components/DoubtsFeed.tsx",
+        "frontend/src/hooks/useGetAllDoubts.ts",
+        "frontend/src/hooks/usePostDoubt.ts",
+        "frontend/src/pages/DoubtsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-an-answer-comment-section-where-seniors-can-respond-to-doubts-with-explanations-answers-should-support-text-content-and-optionally-allow-attaching-notes-text-files-or-short-video-explanations",
+      "featureTitle": "Build an answer/comment section where Seniors can respond to doubts with explanations. Answers should support text content and optionally allow attaching notes (text files) or short video explanations.",
+      "files": [
+        "frontend/src/components/AnswerCard.tsx",
+        "frontend/src/components/AnswerForm.tsx",
+        "frontend/src/components/AnswersList.tsx",
+        "frontend/src/hooks/useGetAnswersForDoubt.ts",
+        "frontend/src/hooks/usePostAnswer.ts",
+        "frontend/src/pages/DoubtDetailPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-a-rating-system-where-students-can-rate-answers-provided-by-seniors-each-answer-should-display-its-average-rating-and-students-should-be-able-to-submit-a-rating-from-1-to-5-stars",
+      "featureTitle": "Implement a rating system where students can rate answers provided by Seniors. Each answer should display its average rating and students should be able to submit a rating from 1 to 5 stars.",
+      "files": [
+        "frontend/src/components/AnswerCard.tsx",
+        "frontend/src/components/RatingInput.tsx",
+        "frontend/src/components/RatingStars.tsx",
+        "frontend/src/hooks/useRateAnswer.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-leaderboard-page-that-displays-the-top-seniors-ranked-by-their-earned-points-the-leaderboard-should-show-rank-name-and-total-points",
+      "featureTitle": "Build a leaderboard page that displays the top Seniors ranked by their earned points. The leaderboard should show rank, name, and total points.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/Layout.tsx",
+        "frontend/src/components/LeaderboardTable.tsx",
+        "frontend/src/hooks/useGetLeaderboard.ts",
+        "frontend/src/pages/LeaderboardPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-6"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-design-a-visually-engaging-and-modern-frontend-with-a-cohesive-educational-theme-use-a-warm-friendly-color-palette-avoid-blue-and-purple-unless-naturally-suited-with-clear-typography-optimized-for-readability-the-layout-should-emphasize-content-hierarchy-with-prominent-doubt-cards-clean-answer-threads-and-intuitive-navigation-for-juniors-and-seniors",
+      "featureTitle": "Design a visually engaging and modern frontend with a cohesive educational theme. Use a warm, friendly color palette (avoid blue and purple unless naturally suited) with clear typography optimized for readability. The layout should emphasize content hierarchy with prominent doubt cards, clean answer threads, and intuitive navigation for juniors and seniors.",
+      "files": [
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-7"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-render-generated-images-for-the-homepage-hero-section-doubt-placeholder-icons-and-leaderboard-trophy-graphics-as-static-assets-in-frontend-public-assets-generated",
+      "featureTitle": "Render generated images for the homepage hero section, doubt placeholder icons, and leaderboard trophy graphics as static assets in frontend/public/assets/generated.",
+      "files": [
+        "frontend/src/pages/DoubtsPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-8"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

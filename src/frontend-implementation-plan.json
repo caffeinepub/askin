@@ -1,0 +1,246 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Askin Student Q&A Platform Frontend Implementation",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Implement user authentication UI with role selection for Junior and Senior students using Internet Identity",
+      "acceptanceCriteria": [
+        "Users can sign up and specify their role (Junior or Senior)",
+        "Users can log in using Internet Identity",
+        "User role is persisted and retrieved on login",
+        "Authentication state is maintained across sessions"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/LoginButton.tsx",
+          "operation": "create",
+          "description": "Create authentication button component using the authorization component's useInternetIdentity hook. Handle login/logout flow with proper error handling and query cache clearing on logout. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/RoleSetupModal.tsx",
+          "operation": "create",
+          "description": "Create modal for first-time users to select their role (Junior or Senior) and provide their name. Use the authorization component's getCallerUserProfile and saveCallerUserProfile methods. Display only when user is authenticated but has no profile. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useGetCallerUserProfile.ts",
+          "operation": "create",
+          "description": "Create React Query hook for fetching current user profile. Follow the authorization component's pattern to prevent modal flash by properly handling actor dependency and loading states. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/hooks/useSaveCallerUserProfile.ts",
+          "operation": "create",
+          "description": "Create React Query mutation hook for saving user profile with role selection (Junior/Senior). Invalidate currentUserProfile query on success. Verify the authorization component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "create",
+          "description": "Create main layout component with header containing navigation links (Doubts, Leaderboard), LoginButton, and footer. Integrate RoleSetupModal that displays conditionally when user is authenticated but has no profile using useGetCallerUserProfile hook. Apply consistent spacing and warm color scheme."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap application with Layout component. Ensure authentication context is available to all routes. Add route guards that require authentication before showing application content."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Create doubt posting UI for Juniors with text description and optional photo attachment",
+      "acceptanceCriteria": [
+        "Junior users can create a new doubt post with a title and description",
+        "Juniors can optionally upload a single photo with their doubt",
+        "Each doubt shows the author, timestamp, and attached photo if present",
+        "All doubts are displayed in a feed or list view"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/DoubtForm.tsx",
+          "operation": "create",
+          "description": "Create form component for posting doubts with description textarea and optional image upload using ExternalBlob.fromBytes for file handling. Use the blob-storage component for image upload with progress tracking. Show upload progress indicator. Only render for Junior role users. Verify the blob-storage component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/DoubtCard.tsx",
+          "operation": "create",
+          "description": "Create doubt display card showing author name, timestamp, description, and attached photo if present. Use ExternalBlob.getDirectURL() to display images. Format timestamp as readable date. Fetch author's UserProfile to display name instead of Principal. Include click handler to navigate to doubt detail view. Use doubt icon from frontend/public/assets/generated/doubt-icon.dim_128x128.png as fallback when no doubt attachment is present or as decorative icon in card header."
+        },
+        {
+          "path": "frontend/src/components/DoubtsFeed.tsx",
+          "operation": "create",
+          "description": "Create feed component displaying all doubts in reverse chronological order using DoubtCard components. Include empty state when no doubts exist. Add loading and error states."
+        },
+        {
+          "path": "frontend/src/hooks/useGetAllDoubts.ts",
+          "operation": "create",
+          "description": "Create React Query hook for fetching all doubts from backend. Return array of [Principal, Doubt] tuples."
+        },
+        {
+          "path": "frontend/src/hooks/usePostDoubt.ts",
+          "operation": "create",
+          "description": "Create React Query mutation hook for posting doubts. Handle ExternalBlob conversion for optional attachment. Invalidate doubts query on success. Use the blob-storage component for file upload. Verify the blob-storage component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/DoubtsPage.tsx",
+          "operation": "create",
+          "description": "Create main doubts page composing DoubtsFeed and conditionally rendering DoubtForm for Junior users. Check user role from profile to show/hide form. Add hero section at top using the generated hero image from frontend/public/assets/generated/hero-students.dim_1200x600.png with welcoming headline and subtitle introducing Askin platform."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add routes for DoubtsPage (/) and DoubtDetailPage (/doubt/:id). Set DoubtsPage as default home route."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Build answer submission UI for Seniors with text, optional notes, and optional video attachments",
+      "acceptanceCriteria": [
+        "Senior users can post answers to any doubt",
+        "Answers support text explanations",
+        "Seniors can optionally attach text notes to their answers",
+        "Seniors can optionally attach short video files to their answers",
+        "All answers for a doubt are displayed beneath the doubt in chronological order"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AnswerForm.tsx",
+          "operation": "create",
+          "description": "Create form component for Seniors to post answers with text explanation, optional notes file upload, and optional video upload. Use ExternalBlob.fromBytes for file handling with upload progress tracking. Only render for Senior role users. Use the blob-storage component for file and video uploads. Verify the blob-storage component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/AnswerCard.tsx",
+          "operation": "create",
+          "description": "Create answer display card showing responder name, text explanation, rating stars, and attachments. Use ExternalBlob.getDirectURL() for notes and video display. Show video player for video attachments and download link for notes. Display average rating and number of ratings. Use notes icon from frontend/public/assets/generated/notes-icon.dim_64x64.png for notes attachments and video icon from frontend/public/assets/generated/video-icon.dim_64x64.png for video attachments in the attachment display area."
+        },
+        {
+          "path": "frontend/src/components/AnswersList.tsx",
+          "operation": "create",
+          "description": "Create list component displaying all answers for a doubt using AnswerCard components. Sort answers by timestamp. Include empty state when no answers exist."
+        },
+        {
+          "path": "frontend/src/hooks/useGetAnswersForDoubt.ts",
+          "operation": "create",
+          "description": "Create React Query hook for fetching answers for a specific doubt. Accept doubtId parameter."
+        },
+        {
+          "path": "frontend/src/hooks/usePostAnswer.ts",
+          "operation": "create",
+          "description": "Create React Query mutation hook for posting answers. Handle ExternalBlob conversion for optional notes and video attachments. Invalidate answers query on success. Use the blob-storage component for file uploads. Verify the blob-storage component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/DoubtDetailPage.tsx",
+          "operation": "create",
+          "description": "Create doubt detail page showing full doubt with DoubtCard, AnswersList, and conditionally rendering AnswerForm for Senior users. Accept doubt ID from URL params."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Implement rating UI for students to rate answers with 1-5 star system",
+      "acceptanceCriteria": [
+        "Each answer has a visible rating display (e.g., star icons)",
+        "Users can rate an answer from 1 to 5 stars",
+        "Average rating is calculated and displayed for each answer",
+        "A user can only rate an answer once"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/RatingStars.tsx",
+          "operation": "create",
+          "description": "Create reusable star rating component displaying 1-5 stars. Support both display mode (showing average rating) and interactive mode (allowing user to submit rating). Use filled/empty star icons."
+        },
+        {
+          "path": "frontend/src/components/RatingInput.tsx",
+          "operation": "create",
+          "description": "Create interactive rating input component using RatingStars in interactive mode. Handle click events to submit ratings. Show confirmation message on successful rating. Disable after user has rated once."
+        },
+        {
+          "path": "frontend/src/hooks/useRateAnswer.ts",
+          "operation": "create",
+          "description": "Create React Query mutation hook for rating answers. Accept answerer Principal, doubtId, and rating value. Invalidate answers query on success to refresh ratings."
+        },
+        {
+          "path": "frontend/src/components/AnswerCard.tsx",
+          "operation": "modify",
+          "description": "Integrate RatingStars component in display mode to show average rating and RatingInput component to allow authenticated users to rate. Show rating statistics (average and count)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Build leaderboard page displaying top Seniors ranked by earned points",
+      "acceptanceCriteria": [
+        "Leaderboard displays Seniors sorted by total points in descending order",
+        "Each leaderboard entry shows rank number, Senior name, and points",
+        "Leaderboard is accessible from the main navigation",
+        "Leaderboard updates dynamically as points change"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/LeaderboardTable.tsx",
+          "operation": "create",
+          "description": "Create leaderboard table component displaying rank, Senior name, and points. Fetch UserProfile for each userId to display name instead of Principal. Include trophy icon from frontend/public/assets/generated/trophy-icon.dim_128x128.png for top 3 ranks. Add visual distinction for podium positions."
+        },
+        {
+          "path": "frontend/src/hooks/useGetLeaderboard.ts",
+          "operation": "create",
+          "description": "Create React Query hook for fetching leaderboard data. Return array of LeaderboardEntry objects sorted by points."
+        },
+        {
+          "path": "frontend/src/pages/LeaderboardPage.tsx",
+          "operation": "create",
+          "description": "Create leaderboard page composing LeaderboardTable with header and description. Include loading and error states. Wire generated trophy-icon.dim_128x128.png from frontend/public/assets/generated/trophy-icon.dim_128x128.png into page header."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add route for LeaderboardPage at /leaderboard path."
+        },
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "modify",
+          "description": "Add Leaderboard navigation link in header pointing to /leaderboard route."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Design visually engaging frontend with warm educational theme and clear content hierarchy",
+      "acceptanceCriteria": [
+        "The application has a consistent visual theme across all pages",
+        "Color palette and typography are chosen to support an educational, welcoming environment",
+        "Layout clearly separates doubts, answers, ratings, and leaderboard sections",
+        "UI components follow a cohesive design system"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update global styles with warm educational color palette (oranges, yellows, warm greens, avoiding blue/purple). Define CSS custom properties for primary, secondary, accent colors. Set typography with clear readable fonts. Add utility classes for content hierarchy."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind theme with custom educational color palette (warm colors), typography scale optimized for readability, and spacing system supporting clear content hierarchy. Configure custom font families if needed."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Wire generated images into UI as static assets for hero, icons, and graphics",
+      "acceptanceCriteria": [
+        "Generated images are stored in frontend/public/assets/generated",
+        "Images are correctly referenced in frontend components",
+        "All generated images load without errors"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/DoubtsPage.tsx",
+          "operation": "modify",
+          "description": "Verify hero image reference from frontend/public/assets/generated/hero-students.dim_1200x600.png is correctly integrated in hero section."
+        }
+      ]
+    }
+  ]
+}

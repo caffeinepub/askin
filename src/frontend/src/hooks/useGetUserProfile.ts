@@ -1,0 +1,17 @@
+import { useQuery } from '@tanstack/react-query';
+import { useActor } from './useActor';
+import { Principal } from '@icp-sdk/core/principal';
+import { UserProfile } from '../backend';
+
+export function useGetUserProfile(userId: Principal) {
+  const { actor, isFetching } = useActor();
+
+  return useQuery<UserProfile | null>({
+    queryKey: ['userProfile', userId.toString()],
+    queryFn: async () => {
+      if (!actor) return null;
+      return actor.getUserProfile(userId);
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
