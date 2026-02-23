@@ -1,24 +1,12 @@
 import { RouterProvider, createRouter, createRoute, createRootRoute, Outlet } from '@tanstack/react-router';
 import { useInternetIdentity } from './hooks/useInternetIdentity';
 import Layout from './components/Layout';
+import LoginScreen from './components/LoginScreen';
 import DoubtsPage from './pages/DoubtsPage';
 import DoubtDetailPage from './pages/DoubtDetailPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 
 function RootComponent() {
-  const { identity } = useInternetIdentity();
-  
-  if (!identity) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50 dark:from-gray-900 dark:to-gray-800">
-        <div className="text-center space-y-4 p-8">
-          <h1 className="text-4xl font-bold text-orange-600 dark:text-orange-400">Welcome to Askin</h1>
-          <p className="text-lg text-gray-700 dark:text-gray-300">Please log in to continue</p>
-        </div>
-      </div>
-    );
-  }
-  
   return (
     <Layout>
       <Outlet />
@@ -59,5 +47,25 @@ declare module '@tanstack/react-router' {
 }
 
 export default function App() {
+  const { identity, isInitializing } = useInternetIdentity();
+
+  // Show loading state while checking for stored identity
+  if (isInitializing) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50 dark:from-gray-900 dark:to-gray-800">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login screen if not authenticated
+  if (!identity) {
+    return <LoginScreen />;
+  }
+
+  // Show app with routing once authenticated
   return <RouterProvider router={router} />;
 }

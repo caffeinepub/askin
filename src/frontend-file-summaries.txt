@@ -1,6 +1,6 @@
 {
-  "frontend/src/App.tsx": "Main application component with TanStack Router setup, defining routes for doubts feed, doubt detail, and leaderboard pages with authentication guard using properly named RootComponent.",
-  "frontend/src/components/Layout.tsx": "Main layout wrapper component with header navigation, user profile display, login button, footer with attribution, and role setup modal integration.",
+  "frontend/src/App.tsx": "Main application component that checks authentication status first and renders LoginScreen for unauthenticated users or RouterProvider with routes for authenticated users.",
+  "frontend/src/components/Layout.tsx": "Main layout wrapper component with header navigation, user profile display, login button, footer with attribution, and role setup modal integration, simplified to assume authenticated state.",
   "frontend/src/components/LoginButton.tsx": "Authentication button component using Internet Identity for login/logout with proper query cache clearing.",
   "frontend/src/components/RoleSetupModal.tsx": "Modal dialog for first-time users to set their name and choose role (Junior or Senior) with visual role selection cards.",
   "frontend/src/components/DoubtForm.tsx": "Form component for Junior users to post doubts with text description and optional image upload with progress tracking.",
@@ -25,5 +25,6 @@
   "frontend/src/hooks/useGetLeaderboard.ts": "React Query hook for fetching leaderboard data.",
   "frontend/src/hooks/useGetUserProfile.ts": "React Query hook for fetching user profile by Principal ID.",
   "frontend/src/index.css": "Global styles with warm educational OKLCH color palette (oranges, ambers, yellows) for light and dark modes.",
-  "frontend/tailwind.config.js": "Tailwind configuration with warm color tokens, custom font family, and educational theme styling."
+  "frontend/tailwind.config.js": "Tailwind configuration with warm color tokens, custom font family, and educational theme styling.",
+  "frontend/src/components/LoginScreen.tsx": "Dedicated login screen component with branding, feature highlights, and Internet Identity authentication button displayed before any application content."
 }

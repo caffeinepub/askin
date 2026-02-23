@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
+  "projectStateVersion": 5,
   "summary": "A student Q&A platform named 'askin' where juniors can post doubts (text/photo) and seniors answer with explanations (notes/video). Features rating system, points/certificates for seniors, and leaderboard. Built with HTML/CSS/JavaScript and Firebase.",
   "architectural_notes": [
     "Web-based application using HTML, CSS, JavaScript",
@@ -11,7 +11,6 @@
   ],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Hero section illustration showing students collaborating and learning together, warm and welcoming educational theme (hero-students.dim_1200x600.png)\n- Icon representing a question or doubt, simple and friendly style (doubt-icon.dim_128x128.png)\n- Trophy or medal icon for leaderboard, gold color with celebratory feel (trophy-icon.dim_128x128.png)\n- Icon for notes or documents, minimalist educational style (notes-icon.dim_64x64.png)\n- Icon for video content, play button with modern styling (video-icon.dim_64x64.png)",
   "existing_features": [
     {
       "id": "feature-implement-user-authentication-system-with-two-user-roles-junior-students-who-post-doubts-and-senior-students-who-answer-doubts-users-must-be-able-to-sign-up-and-log-in-using-internet-identity",
@@ -66,6 +65,14 @@
       "title": "Render generated images for the homepage hero section, doubt placeholder icons, and leaderboard trophy graphics as static assets in frontend/public/assets/generated.",
       "reqIds": [
         "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-modify-the-application-entry-point-to-present-the-login-authentication-option-immediately-when-users-first-access-the-application-before-showing-any-other-content-or-features",
+      "title": "Modify the application entry point to present the login/authentication option immediately when users first access the application, before showing any other content or features.",
+      "reqIds": [
+        "REQ-9"
       ],
       "version": 1
     }

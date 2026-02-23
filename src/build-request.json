@@ -1,189 +1,40 @@
 {
   "kind": "build_request",
-  "title": "Build Askin student Q&A platform with doubt posting, answers, ratings, and leaderboard",
-  "projectName": "Askin",
+  "title": "Show login option first on application startup",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Implement user authentication system with two user roles: Junior (students who post doubts) and Senior (students who answer doubts). Users must be able to sign up and log in using Internet Identity.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Login / Signup system",
-          "Login as Junior → Post doubt",
-          "Login as Senior → Answer doubt"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Users can sign up and specify their role (Junior or Senior)",
-        "Users can log in using Internet Identity",
-        "User role is persisted and retrieved on login",
-        "Authentication state is maintained across sessions"
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Create doubt posting functionality where Juniors can post doubts with a text description and optionally attach a photo. Each doubt should be stored with the author's identity, timestamp, and attachment.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Juniors post doubts (text/photo)",
-          "Post Doubt (Text + Image upload)"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Junior users can create a new doubt post with a title and description",
-        "Juniors can optionally upload a single photo with their doubt",
-        "Each doubt shows the author, timestamp, and attached photo if present",
-        "All doubts are displayed in a feed or list view"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Build an answer/comment section where Seniors can respond to doubts with explanations. Answers should support text content and optionally allow attaching notes (text files) or short video explanations.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Seniors answer with explanation (notes/video)",
-          "Comment/Answer section",
-          "Notes Upload section",
-          "Short video explanation upload"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Senior users can post answers to any doubt",
-        "Answers support text explanations",
-        "Seniors can optionally attach text notes to their answers",
-        "Seniors can optionally attach short video files to their answers",
-        "All answers for a doubt are displayed beneath the doubt in chronological order"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Implement a rating system where students can rate answers provided by Seniors. Each answer should display its average rating and students should be able to submit a rating from 1 to 5 stars.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Students can rate answers",
-          "Rating system"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Each answer has a visible rating display (e.g., star icons)",
-        "Users can rate an answer from 1 to 5 stars",
-        "Average rating is calculated and displayed for each answer",
-        "A user can only rate an answer once"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Create a points system where Seniors earn points for providing answers and receiving high ratings. Track cumulative points for each Senior user.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Seniors earn points & certificates"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Seniors earn points when they post an answer",
-        "Bonus points are awarded for highly rated answers (e.g., 4+ stars)",
-        "Each Senior's total points are tracked and persisted",
-        "Points are displayed on the Senior's profile or in the leaderboard"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Build a leaderboard page that displays the top Seniors ranked by their earned points. The leaderboard should show rank, name, and total points.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Leaderboard for top seniors",
-          "Show rating & leaderboard"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Leaderboard displays Seniors sorted by total points in descending order",
-        "Each leaderboard entry shows rank number, Senior name, and points",
-        "Leaderboard is accessible from the main navigation",
-        "Leaderboard updates dynamically as points change"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Design a visually engaging and modern frontend with a cohesive educational theme. Use a warm, friendly color palette (avoid blue and purple unless naturally suited) with clear typography optimized for readability. The layout should emphasize content hierarchy with prominent doubt cards, clean answer threads, and intuitive navigation for juniors and seniors.",
+      "id": "REQ-9",
+      "text": "Modify the application entry point to present the login/authentication option immediately when users first access the application, before showing any other content or features.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-6"
+        ],
+        "quotes": [
+          "Enter the logins option forst"
         ]
       },
       "acceptanceCriteria": [
-        "The application has a consistent visual theme across all pages",
-        "Color palette and typography are chosen to support an educational, welcoming environment",
-        "Layout clearly separates doubts, answers, ratings, and leaderboard sections",
-        "UI components follow a cohesive design system"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Render generated images for the homepage hero section, doubt placeholder icons, and leaderboard trophy graphics as static assets in frontend/public/assets/generated.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Generated images are stored in frontend/public/assets/generated",
-        "Images are correctly referenced in frontend components",
-        "All generated images load without errors"
+        "When users access the application for the first time, they see a login prompt or authentication interface before the main content",
+        "The login interface is prominently displayed and clearly guides users to authenticate via Internet Identity",
+        "After successful authentication, users proceed to the main application content (doubts feed, role setup, etc.)",
+        "Unauthenticated users cannot access main application features without logging in first"
       ]
     }
   ],
   "constraints": [
-    "Use React with TypeScript for the frontend",
-    "Use Motoko for the backend with single-actor architecture",
-    "Use Internet Identity for authentication (not Firebase or other third-party auth)",
-    "Store all data in the backend actor's stable storage",
-    "Do not integrate external databases or cloud storage services",
-    "Video and image uploads must be handled through the backend actor",
-    "Do not use Firebase, Flutter, or any technologies outside the platform's stack"
+    "Must use existing Internet Identity authentication system",
+    "Do not modify the useInternetIdentity hook or authentication logic",
+    "Preserve existing routing structure and navigation once authenticated"
   ],
   "nonGoals": [
-    "AI chatbot integration (mentioned as future scope only)",
-    "Mobile app development (Flutter is not supported)",
-    "Real-time notifications or push notifications",
-    "Email notifications",
-    "Certificate generation system (mentioned but not detailed)",
-    "External cloud storage integration"
+    "Changing the authentication provider from Internet Identity",
+    "Modifying the role setup flow after login",
+    "Adding new authentication methods"
   ],
   "imageRequirements": {
-    "required": [
-      "Hero section illustration showing students collaborating and learning together, warm and welcoming educational theme (hero-students.dim_1200x600.png)",
-      "Icon representing a question or doubt, simple and friendly style (doubt-icon.dim_128x128.png)",
-      "Trophy or medal icon for leaderboard, gold color with celebratory feel (trophy-icon.dim_128x128.png)",
-      "Icon for notes or documents, minimalist educational style (notes-icon.dim_64x64.png)",
-      "Icon for video content, play button with modern styling (video-icon.dim_64x64.png)"
-    ],
+    "required": [],
     "edits": []
   }
 }

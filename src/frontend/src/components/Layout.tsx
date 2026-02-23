@@ -1,4 +1,4 @@
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { MessageCircle, Trophy, Heart } from 'lucide-react';
 import LoginButton from './LoginButton';
 import RoleSetupModal from './RoleSetupModal';
@@ -8,7 +8,6 @@ import { useInternetIdentity } from '../hooks/useInternetIdentity';
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { identity } = useInternetIdentity();
   const { data: userProfile, isLoading: profileLoading, isFetched } = useGetCallerUserProfile();
-  const navigate = useNavigate();
   const isAuthenticated = !!identity;
   const showProfileSetup = isAuthenticated && !profileLoading && isFetched && userProfile === null;
 
@@ -26,7 +25,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   Askin
                 </span>
               </Link>
-              {isAuthenticated && userProfile && (
+              {userProfile && (
                 <nav className="hidden md:flex items-center space-x-6">
                   <Link
                     to="/"
@@ -45,7 +44,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               )}
             </div>
             <div className="flex items-center space-x-4">
-              {isAuthenticated && userProfile && (
+              {userProfile && (
                 <div className="hidden sm:flex items-center space-x-2 px-4 py-2 bg-orange-100 dark:bg-orange-900/30 rounded-full">
                   <span className="text-sm font-medium text-orange-800 dark:text-orange-300">
                     {userProfile.name}
